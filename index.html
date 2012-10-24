@@ -3,15 +3,34 @@
 		<script type="text/javascript" src="jquery.js"></script>  
 		<script>
 			$(document).ready(function() {
-   				$("a").click(function() {
-     				alert("Hello world!");
+   				$("td").click(function() {
+     				$(this).addClass("selected");
    				});
  			});
 		</script>
+		<style>
+		 	table {border-collapse: collapse; }
+			td { 
+				border-style: solid; 
+				border-width: 1px;  
+				font-size: 14px; 
+				font-family: Courier; 
+				cursor: pointer;
+				padding: 5px;
+			}
+  			.selected { background:yellow; }
+  		</style>
 	</head>
 	<body>
-		hi!
-		<a href="">Link</a>
+		<table>
+			{% for row in table %}
+				<tr> 
+					{% for col in row %}
+						<td nowrap="nowrap">{{ col }}</td>
+					{% endfor %}
+				</tr>
+			{% endfor %}
+		</table>
 	</body>
 </html>
 
