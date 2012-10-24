@@ -4,7 +4,11 @@
 		<script>
 			$(document).ready(function() {
    				$("td").click(function() {
-     				$(this).addClass("selected");
+   					if ($(this).attr('correct') == '1') {
+						$(this).addClass("selected_ok");
+   					} else {
+	     				$(this).addClass("selected");
+     				}
    				});
  			});
 		</script>
@@ -19,19 +23,39 @@
 				padding-left: 5px;
 				padding-right: 5px;
 			}
+  			
+  			.selected_ok  { background: green;}
   			.selected { background:yellow; }
+  			
   		</style>
 	</head>
 	<body>
-		<table>
+		test id: {{seed}} 
+
+		{% if mode == 't' %}
+			<a href="?mode=q">questions</a>
+			<table>
 			{% for row in table %}
 				<tr> 
 					{% for col in row %}
-						<td nowrap="nowrap">{{ col }}</td>
+						<td {% if col[1] %}correct="1"{%endif%} nowrap="nowrap">
+							{{ col[0][0] }} {{ col[0][1] }} 
+						</td>
 					{% endfor %}
 				</tr>
 			{% endfor %}
-		</table>
+			</table>
+		{% endif %}
+
+		{% if mode == 'q' %}
+			<a href="?mode=t">test</a>
+			 {% for q in query %} 
+			 <p > 
+			 	{{q[0][1]}} {{q[1][1]}} {{q[0][0]}} {{q[1][0]}}  
+			 </p>
+			 {%endfor%} 
+		{% endif %}
+
 	</body>
 </html>
 

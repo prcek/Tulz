@@ -13,6 +13,9 @@ jinja_environment = jinja2.Environment(
 def myjoin(iterable):
     return string.join(iterable,sep='')
 
+def chunks(thing, chunk_length):
+    for i in xrange(0, len(thing), chunk_length):
+        yield thing[i:i+chunk_length]
 
 class MainPage(webapp2.RequestHandler):
     def get(self, seed=None):
@@ -23,8 +26,7 @@ class MainPage(webapp2.RequestHandler):
         #    mode = 't'
         #    return webapp2.redirect('/%s/%s' % (seed,mode))    
 
-        
-        mode='t'
+        mode=self.request.GET.get('mode','t')
         r = random.Random(int(seed))
         #r = random.Random()
 
@@ -38,13 +40,32 @@ class MainPage(webapp2.RequestHandler):
         l3 = map(myjoin,r.sample(list(itertools.product(string.ascii_uppercase,repeat=3)),10))
         l.append('OK')
         l.extend(l3)
-        table = []
-        for i in range(1,41):
-            lr = map(string.join,zip(l,itertools.repeat(str(i))))
-            table.append(lr)
         
+
+
+
+        query = []
+        for i in range(1,41):
+            query.extend(zip(zip(l,itertools.repeat(str(i))),itertools.repeat(False)))
+            
+        subquery = r.sample(range(0,len(query)),100)
+        questions = []
+        for s in subquery:
+            query[s]=(query[s][0],True)
+            questions.extend(query[s])
+
+        table = chunks(query,20)
+
+
+        query_a = questions[:len(questions)/2]
+        query_b = questions[len(questions)/2:]
+        query = zip(query_a,query_b)
+
         template_values = {
+            'seed': seed,
+            'mode': mode,
             'table': table,
+            'query': query,
         }
 
         template = jinja_environment.get_template('index.html')
