@@ -2,13 +2,27 @@
 	<head>
 		<script type="text/javascript" src="jquery.js"></script>  
 		<script>
+			$c_ok = 0;
+			$c_wrong = 0;
 			$(document).ready(function() {
    				$("td").click(function() {
+
+   					if ( ($(this).hasClass('selected')) || ($(this).hasClass('selected_ok')) ){
+   						return;
+   					} 
+
    					if ($(this).attr('correct') == '1') {
 						$(this).addClass("selected_ok");
+						$c_ok=$c_ok+1;
    					} else {
 	     				$(this).addClass("selected");
+	     				$c_wrong=$c_wrong+1;
      				}
+
+   				});
+   				$("#check").click(function() {
+   					alert('Correct:'+$c_ok+' Wrong:'+$c_wrong+' Total:'+($c_ok+$c_wrong));
+   					return false;
    				});
  			});
 		</script>
@@ -23,8 +37,7 @@
 				padding-left: 5px;
 				padding-right: 5px;
 			}
-  			
-  			.selected_ok  { background: green;}
+  			.selected_ok  { background: yellow;}
   			.selected { background:yellow; }
   			
   		</style>
@@ -34,12 +47,19 @@
 
 		{% if mode == 't' %}
 			<a href="?mode=q">questions</a>
+			<a href="" id='check'>check</a>
+			<a href="/">new</a>
+			<hr>
 			<table>
 			{% for row in table %}
 				<tr> 
 					{% for col in row %}
 						<td {% if col[1] %}correct="1"{%endif%} nowrap="nowrap">
-							{{ col[0][0] }} {{ col[0][1] }} 
+							{% if swap %} 
+							{{ col[0][1] }} {{ col[0][0] }}
+							{% else %}
+							{{ col[0][0] }} {{ col[0][1] }}
+							{% endif %}
 						</td>
 					{% endfor %}
 				</tr>

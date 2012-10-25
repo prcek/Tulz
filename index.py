@@ -36,7 +36,7 @@ class MainPage(webapp2.RequestHandler):
         r.shuffle(l)
         if 'OK' in l:
             l.remove('OK')
-        l = r.sample(l,9)
+        l = r.sample(l,10)
         l3 = map(myjoin,r.sample(list(itertools.product(string.ascii_uppercase,repeat=3)),10))
         l.append('OK')
         l.extend(l3)
@@ -45,8 +45,9 @@ class MainPage(webapp2.RequestHandler):
 
 
         query = []
-        for i in range(1,41):
-            query.extend(zip(zip(l,itertools.repeat(str(i))),itertools.repeat(False)))
+        shift = r.sample(range(1,50),30)
+        for i in range(1,30):
+            query.extend(zip(zip(l,map(lambda x: x+i, shift)),itertools.repeat(False)))
             
         subquery = r.sample(range(0,len(query)),100)
         questions = []
@@ -54,8 +55,8 @@ class MainPage(webapp2.RequestHandler):
             query[s]=(query[s][0],True)
             questions.extend(query[s])
 
-        table = chunks(query,20)
-
+        table = chunks(query,21)
+        swap_mode = r.sample([True,False],1)[0]
 
         query_a = questions[:len(questions)/2]
         query_b = questions[len(questions)/2:]
@@ -64,6 +65,7 @@ class MainPage(webapp2.RequestHandler):
         template_values = {
             'seed': seed,
             'mode': mode,
+            'swap': swap_mode,
             'table': table,
             'query': query,
         }
