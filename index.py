@@ -26,22 +26,46 @@ class MainPage(webapp2.RequestHandler):
         #    mode = 't'
         #    return webapp2.redirect('/%s/%s' % (seed,mode))    
 
+
+
+        abc = ['BC','A','CD','AB','BA','TR','AEB','UTZ','ORT','QFE','AEB',
+'RTU','CAB','RTA','AGL','AT','AIS','ABT','AC','AMS','ATS',
+'BKN','BL','BR','BTN','CI','CNL','COR','COT','CS','CTA','CU',
+'DA','DEG','DER','DME','DH','DP','DR','DS','DU','DZ','END',
+'EST','ETA','FAF','FAP','FBL','FBW','FC','FEW','FG','FIR',
+'FL','FM','FMC','FMS','FPM','FRG','FU','FZ','GND','GP','GR',
+'GS','HL','HR','HVY','HZ','IAF','IAS','IC','ICE','IF','IFR',
+'ILS','IM','IMC','ISA','LAN','LAT','LDG','LF',
+'LLZ','LOC','LOM','LYR','MOC','MOD','MON','MOV','MPS','MSA',
+'MSL','NSC','NSW','OBS','OVC','PAR','PDG','PIC','PL',
+'PO','PR','PS','PSN','QNH','RA','RDH','RSR','RVR','RWY','SEV',
+'SFC','SG','SH','SID','SKC','SLW','SM',
+'SOC','SN','SQ','SQL','SS','SST','ST','SW','SWH','SWL','SWM',
+'TAF','TAS','TC','UIR','UTC','VA','VAL','VC','VER','VFR','VIS',
+'VKV','VOR','VPD','VRB','VSP','WKN','WMO']
+
+        abc_l = filter(lambda s: len(s)<3, abc)
+        abc_r = filter(lambda s: len(s)>=3, abc)
+
+
         mode=self.request.GET.get('mode','t')
         r = random.Random(int(seed))
         #r = random.Random()
 
-        l1 = r.sample(string.ascii_uppercase,5)
-        l2 = map(myjoin,r.sample(list(itertools.product(string.ascii_uppercase,repeat=2)),10))
-        l = l1+l2
-        r.shuffle(l)
-        if 'OK' in l:
-            l.remove('OK')
-        l = r.sample(l,10)
-        l3 = map(myjoin,r.sample(list(itertools.product(string.ascii_uppercase,repeat=3)),10))
-        l.append('OK')
-        l.extend(l3)
+    #    l1 = r.sample(string.ascii_uppercase,5)
+    #    l2 = map(myjoin,r.sample(list(itertools.product(string.ascii_uppercase,repeat=2)),10))
+    #    l = l1+l2
+    #    r.shuffle(l)
+    #    if 'OK' in l:
+    #        l.remove('OK')
+    #    l = r.sample(l,10)
+    #    l3 = map(myjoin,r.sample(list(itertools.product(string.ascii_uppercase,repeat=3)),10))
+    #    l.append('OK')
+    #    l.extend(l3)
         
-
+        l = r.sample(abc_l,10)
+        l.append('OK')
+        l.extend(r.sample(abc_r,10))
 
 
         query = []
