@@ -28,7 +28,7 @@
 
 			var timer = $.timer(function() {
 				tick++;
-				$("#timer").text('tick: '+tick);
+				//$("#timer").text('tick: '+tick);
 				if (tick == 0) {
 					show_question(qqq[question_id]);
 				}
@@ -37,6 +37,7 @@
 					if ((question_id+1) == qqq.length) {
 						timer.stop();
 						question_id = 0;
+						$("#timer").text('');
 					} 
 				}
 
@@ -52,6 +53,7 @@
 			
 
 			function start_test() {
+				$("#timer").text('running');
 				show_question("--- start ---")
 				tick = -3;
 				question_id = 0;
@@ -82,6 +84,7 @@
    					return false;
    				});
    				$("#auto").click(function() {
+   					$("#qbox").width($("#table").width());
    					start_test();
    					return false;
    				});
@@ -115,6 +118,7 @@
   				border-style:  solid;
   				border-width: 2px;
   				padding: 10px 10px 10px 10px;
+  				text-align: center;
   			}
   			.hidden { display: none;}
   			
@@ -131,7 +135,7 @@
 			<span id='timer'></span>
 			<div id='qbox' class='hidden'>xxx</div>
 			<hr>
-			<table>
+			<table id="table">
 			{% for row in table %}
 				<tr> 
 					{% for col in row %}
