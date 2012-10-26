@@ -77,14 +77,19 @@ class MainPage(webapp2.RequestHandler):
         questions = []
         for s in subquery:
             query[s]=(query[s][0],True)
-            questions.extend(query[s])
+            questions.append(query[s][0])
 
         table = chunks(query,21)
         swap_mode = r.sample([True,False],1)[0]
 
+         
         query_a = questions[:len(questions)/2]
         query_b = questions[len(questions)/2:]
         query = zip(query_a,query_b)
+
+        
+
+
 
         template_values = {
             'seed': seed,

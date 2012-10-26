@@ -1,7 +1,64 @@
 <html>
 	<head>
-		<script type="text/javascript" src="jquery.js"></script>  
+		<script type="text/javascript" src="jquery.js"></script>
+		<script type="text/javascript" src="jquery.timer.js"></script>
 		<script>
+
+			function show_question(text) {
+				$("#qbox").text(text);
+				if  ($("#qbox").hasClass('hidden')) {
+   						$("#qbox").removeClass('hidden');
+   				}
+
+			}
+
+			function hide_question() {
+				$("#qbox").addClass('hidden');
+			}
+
+			var tick = -1;
+			var question_id = 0;
+			var qqq = [
+			{% for q in query %} 
+			 	"{{q[0][1]}} {{q[1][1]}} {{q[0][0]}} {{q[1][0]}}",
+			 {%endfor%} 
+			 	"--- end ---"
+
+			];
+
+			var timer = $.timer(function() {
+				tick++;
+				$("#timer").text('tick: '+tick);
+				if (tick == 0) {
+					show_question(qqq[question_id]);
+				}
+				if (tick == 2) {
+					hide_question()
+					if ((question_id+1) == qqq.length) {
+						timer.stop();
+						question_id = 0;
+					} 
+				}
+
+				if (tick == 15) {
+					tick = -1;
+					question_id++;
+				}
+
+
+			});
+
+			timer.set({ time : 1000, autostart : false });
+			
+
+			function start_test() {
+				show_question("--- start ---")
+				tick = -3;
+				question_id = 0;
+				timer.play(true);
+			}
+
+
 			$c_ok = 0;
 			$c_wrong = 0;
 			$(document).ready(function() {
@@ -24,6 +81,12 @@
    					alert('Correct:'+$c_ok+' Wrong:'+$c_wrong+' Total:'+($c_ok+$c_wrong));
    					return false;
    				});
+   				$("#auto").click(function() {
+   					start_test();
+   					return false;
+   				});
+
+
  			});
 		</script>
 		<style>
@@ -39,6 +102,21 @@
 			}
   			.selected_ok  { background: yellow;}
   			.selected { background:yellow; }
+
+  			#qbox {
+  				position: absolute;
+  				left: 20px;
+  				top: 50px;
+  				z-index: 1;
+  				background: white;
+  				font-size: 100px;
+  				font-style: bold;
+  				font-family: Courier;
+  				border-style:  solid;
+  				border-width: 2px;
+  				padding: 10px 10px 10px 10px;
+  			}
+  			.hidden { display: none;}
   			
   		</style>
 	</head>
@@ -49,6 +127,9 @@
 			<a href="?mode=q">questions</a>
 			<a href="" id='check'>check</a>
 			<a href="/">new</a>
+			<a href="" id='auto'>start</a>
+			<span id='timer'></span>
+			<div id='qbox' class='hidden'>xxx</div>
 			<hr>
 			<table>
 			{% for row in table %}
