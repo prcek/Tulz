@@ -28,7 +28,11 @@
 
 			var timer = $.timer(function() {
 				tick++;
-				//$("#timer").text('tick: '+tick);
+				$blen = 20;
+				$flen = 10;
+				$len = Math.round(($blen - (($blen-$flen)*(question_id)/qqq.length)));
+				//$("#timer").text('q : '+question_id + '/' + qqq.length + ' delay:'+$len);
+
 				if (tick == 0) {
 					show_question(qqq[question_id]);
 				}
@@ -41,7 +45,7 @@
 					} 
 				}
 
-				if (tick == 15) {
+				if (tick >= (2+$len)) {
 					tick = -1;
 					question_id++;
 				}
@@ -85,6 +89,8 @@
    				});
    				$("#auto").click(function() {
    					$("#qbox").width($("#table").width());
+   					$("#qbox").height($("#table").height());
+   					$("#qbox").offset($("#dtable").offset());
    					start_test();
    					return false;
    				});
@@ -93,7 +99,11 @@
  			});
 		</script>
 		<style>
-		 	table {border-collapse: collapse; }
+		 	table {
+		 		border-collapse: collapse; 
+		 		padding: 10px 10px 10px 10px;
+		 		margin: 0px 0px 0px 0px;
+		 	}
 			td { 
 				border-style: solid; 
 				border-width: 1px;  
@@ -108,8 +118,6 @@
 
   			#qbox {
   				position: absolute;
-  				left: 20px;
-  				top: 50px;
   				z-index: 1;
   				background: white;
   				font-size: 100px;
@@ -119,6 +127,9 @@
   				border-width: 2px;
   				padding: 10px 10px 10px 10px;
   				text-align: center;
+  			}
+  			#dtable {
+  				padding: 0px 0px 0px 0px;
   			}
   			.hidden { display: none;}
   			
@@ -133,8 +144,9 @@
 			<a href="/">new</a>
 			<a href="" id='auto'>start</a>
 			<span id='timer'></span>
-			<div id='qbox' class='hidden'>xxx</div>
 			<hr>
+			<div id='qbox' class='hidden'>xxx</div>
+			<div id='dtable'>
 			<table id="table">
 			{% for row in table %}
 				<tr> 
@@ -150,6 +162,7 @@
 				</tr>
 			{% endfor %}
 			</table>
+			</div>
 		{% endif %}
 
 		{% if mode == 'q' %}
