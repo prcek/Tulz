@@ -36,7 +36,7 @@
 				if (tick == 0) {
 					show_question(qqq[question_id]);
 				}
-				if (tick == 2) {
+				if (tick == 3) {
 					hide_question()
 					if ((question_id+1) == qqq.length) {
 						timer.stop();
@@ -45,7 +45,7 @@
 					} 
 				}
 
-				if (tick >= (2+$len)) {
+				if (tick >= (3+$len)) {
 					tick = -1;
 					question_id++;
 				}
